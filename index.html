@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="/voidshift/">
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="VOID SHIFT — Gravity-flipping arcade survival. Tap to flip. Survive the void.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="VOID SHIFT">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <!-- Open Graph / Social -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="VOID SHIFT — Gravity Survival">
+  <meta property="og:description" content="Flip gravity. Dodge the void. How long can you last?">
+
+  <title>VOID SHIFT</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="icons/Icon-192.png"/>
+
+  <style>
+    html, body {
+      background-color: #050010;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    #loading {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #050010;
+      z-index: 9999;
+    }
+    #loading h1 {
+      font-family: monospace;
+      font-size: 42px;
+      font-weight: 900;
+      letter-spacing: 12px;
+      background: linear-gradient(135deg, #00CFFF, #9B59FF, #FFD700);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 0;
+    }
+    #loading p {
+      font-family: monospace;
+      color: rgba(0,207,255,0.5);
+      letter-spacing: 5px;
+      font-size: 11px;
+      margin-top: 8px;
+    }
+    .loader {
+      margin-top: 40px;
+      width: 120px;
+      height: 2px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .loader-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #00CFFF, #9B59FF);
+      animation: load 1.5s ease forwards;
+    }
+    @keyframes load {
+      to { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div id="loading">
+    <h1>VOID SHIFT</h1>
+    <p>ENTERING THE VOID</p>
+    <div class="loader"><div class="loader-bar"></div></div>
+  </div>
+
+  <script>
+    window.addEventListener('flutter-first-frame', function () {
+      document.getElementById('loading').style.display = 'none';
+    });
+  </script>
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
