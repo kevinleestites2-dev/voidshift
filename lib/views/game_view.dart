@@ -52,6 +52,20 @@ class _GameViewState extends State<GameView>
     }
   }
 
+  void _handleSwipeDown() {
+    HapticFeedback.selectionClick();
+    if (_engine.gameState == GameState.playing) {
+      _engine.handleSwipeDown();
+    }
+  }
+
+  void _handleSwipeUp() {
+    HapticFeedback.selectionClick();
+    if (_engine.gameState == GameState.playing) {
+      _engine.handleSwipeUp();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
@@ -60,6 +74,11 @@ class _GameViewState extends State<GameView>
 
       return GestureDetector(
         onTapDown: (_) => _handleTap(),
+        onVerticalDragEnd: (details) {
+          final vel = details.primaryVelocity ?? 0;
+          if (vel > 200) _handleSwipeDown();
+          if (vel < -200) _handleSwipeUp();
+        },
         child: Stack(
           children: [
             // Background
@@ -67,9 +86,19 @@ class _GameViewState extends State<GameView>
               animation: _bgAnimController,
               builder: (_, __) => CustomPaint(
                 size: Size(constraints.maxWidth, constraints.maxHeight),
-                painter: VoidBackgroundPainter(_bgAnimController.value),
+                painter: VoidBackgroundPainter(
+                  _bgAnimController.value,
+                  flipProgress: _engine.flipProgress,
+                ),
               ),
             ),
+
+            // HUD overlay (surface indicator + energy bar)
+            if (_engine.gameState == GameState.playing)
+              CustomPaint(
+                size: Size(constraints.maxWidth, constraints.maxHeight),
+                painter: HudPainter(_engine),
+              ),
 
             // Game canvas
             if (_engine.gameState == GameState.playing ||
@@ -171,7 +200,7 @@ class _GameViewState extends State<GameView>
           ),
           const SizedBox(height: 8),
           Text(
-            'GRAVITY SURVIVAL',
+            'PARKOUR · FLIP · SURVIVE',
             style: TextStyle(
               color: const Color(0xFF00CFFF).withOpacity(0.7),
               fontSize: 12,
@@ -196,11 +225,11 @@ class _GameViewState extends State<GameView>
           _PulsatingText(text: 'TAP TO ENTER THE VOID'),
           const SizedBox(height: 60),
           Text(
-            'flip gravity · survive · escape',
+            'tap = jump  ·  swipe ↓ = slide  ·  world flips',
             style: TextStyle(
               color: Colors.white.withOpacity(0.3),
-              fontSize: 12,
-              letterSpacing: 3,
+              fontSize: 11,
+              letterSpacing: 2,
             ),
           ),
           const SizedBox(height: 40),
